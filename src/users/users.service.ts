@@ -8,36 +8,36 @@ import { EntityManager, Repository } from 'typeorm';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private readonly itemsRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly entityManager: EntityManager,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const item = new User(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const user = new User(createUserDto);
 
-    const newUser = this.entityManager.save(item);
+    const newUser = this.entityManager.save(user);
 
     return newUser;
   }
 
   async findAll() {
-    return this.itemsRepository.find();
+    return this.usersRepository.find();
   }
 
-  async findOne(id: number) {
-    const item = await this.itemsRepository.findOne({ where: { id } });
+  async findOne(email: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
 
-    if (!item) throw new NotFoundException();
+    if (!user) throw new NotFoundException();
 
-    return item;
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return this.itemsRepository.update(id, updateUserDto);
+    return this.usersRepository.update(id, updateUserDto);
   }
 
   async remove(id: number) {
-    const result = await this.itemsRepository.delete({ id });
+    const result = await this.usersRepository.delete({ id });
 
     if (result.affected === 0) throw new NotFoundException();
 

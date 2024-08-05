@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { UsersModule } from './users/users.module';
 import { CartsModule } from './carts/carts.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CartsModule } from './carts/carts.module';
     ]),
     UsersModule,
     CartsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [

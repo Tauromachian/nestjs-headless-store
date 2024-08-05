@@ -12,10 +12,12 @@ export class UsersService {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User(createUserDto);
 
-    const newUser = this.entityManager.save(user);
+    const newUser = await this.entityManager.save(user);
+
+    delete newUser.password;
 
     return newUser;
   }

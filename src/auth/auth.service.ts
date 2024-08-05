@@ -17,8 +17,6 @@ export class AuthService {
 
     if (user.password !== password) return new UnauthorizedException();
 
-    delete user.password;
-
     const payload = { sub: user.id };
 
     return {

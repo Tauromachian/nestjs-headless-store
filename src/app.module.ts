@@ -6,6 +6,7 @@ import { ItemsModule } from './items/items.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
         limit: 60,
       },
     ]),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

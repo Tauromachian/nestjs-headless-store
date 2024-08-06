@@ -1,11 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { EntityManager, QueryFailedError, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcrypt';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+
 import { User } from './entities/user.entity';
-import { EntityManager, Repository } from 'typeorm';
-import { hash } from 'bcrypt';
+
 import { SALT_ROUNDS } from './constants';
+import { dbErrorCodes } from 'src/database/constants';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +29,19 @@ export class UsersService {
       password: await hash(createUserDto.password, SALT_ROUNDS),
     });
 
-    const newUser = await this.entityManager.save(user);
+    let newUser: User;
+
+    try {
+      newUser = await this.entityManager.save(user);
+    } catch (error) {
+      if (!(error instanceof QueryFailedError)) {
+        throw new InternalServerErrorException('Unexpected error ocurred');
+      }
+
+      if (error.driverError.code === dbErrorCodes.UNIQUE_VIOLATION) {
+        throw new ConflictException('Email already exists');
+      }
+    }
 
     delete newUser.password;
 

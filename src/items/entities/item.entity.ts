@@ -1,6 +1,13 @@
-import { Cart } from 'src/carts/entities/cart.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { CartItem } from 'src/cart-items/entities/cart-item.entity';
 import { Category } from 'src/categories/entities/category.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Item {
@@ -29,6 +36,6 @@ export class Item {
   @ManyToMany(() => Category, (category) => category.items)
   categories: Category[];
 
-  @ManyToMany(() => Cart, (cart) => cart.items)
-  carts: Cart[];
+  @OneToMany(() => CartItem, (cartItem) => cartItem.item)
+  cartItems: CartItem[];
 }

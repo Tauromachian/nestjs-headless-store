@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class CartsService {
   constructor(
-    @InjectRepository(Cart) private readonly itemsRepository: Repository<Cart>,
+    @InjectRepository(Cart) private readonly cartsRepository: Repository<Cart>,
     private readonly entityManager: EntityManager,
   ) {}
 
@@ -22,11 +22,11 @@ export class CartsService {
   }
 
   async findAll() {
-    return this.itemsRepository.find();
+    return this.cartsRepository.find();
   }
 
   async findOne(id: number) {
-    const item = await this.itemsRepository.findOne({ where: { id } });
+    const item = await this.cartsRepository.findOne({ where: { id } });
 
     if (!item) throw new NotFoundException();
 
@@ -34,11 +34,11 @@ export class CartsService {
   }
 
   update(id: number, updateCartDto: UpdateCartDto) {
-    return this.itemsRepository.update(id, updateCartDto);
+    return this.cartsRepository.update(id, updateCartDto);
   }
 
   async remove(id: number) {
-    const result = await this.itemsRepository.delete({ id });
+    const result = await this.cartsRepository.delete({ id });
 
     if (result.affected === 0) throw new NotFoundException();
 

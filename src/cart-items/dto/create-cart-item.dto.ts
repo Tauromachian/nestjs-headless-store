@@ -11,9 +11,9 @@ export class CreateCartItemDto {
 
   @IsNotEmpty()
   @IsInDatabase(Cart, 'id')
-  cartId: string;
+  cartId: number;
 
   @IsNotEmpty()
   @IsInDatabase(Item, 'id')
-  itemId: string;
+  itemId: number;
 }

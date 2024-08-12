@@ -15,7 +15,7 @@ RUN yarn build
 FROM base as runner
 WORKDIR /app
 
-COPY --from=builder chown=nestjs:nodejs /app/dist ./
+COPY --from=builder /app/dist ./
 
 EXPOSE 3000
 ENV APP_PORT 3000

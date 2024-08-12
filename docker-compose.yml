@@ -17,6 +17,7 @@ services:
     build: .
     container_name: nest_headless_store_app
     environment:
+      APP_ENV: production
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USER: nest_user

@@ -3,7 +3,6 @@ FROM node:20-alpine AS base
 FROM base as builder
 WORKDIR /app
 
-ENV APP_ENV production
 RUN corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml ./

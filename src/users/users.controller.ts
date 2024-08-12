@@ -25,6 +25,7 @@ export class UsersController {
     type: CreateUserDto,
   })
   @ApiResponse({ status: 409, description: 'Conflict. Email already exists.' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

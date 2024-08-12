@@ -3,20 +3,19 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 
 import { Cart } from './entities/cart.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CartsService {
   constructor(
     @InjectRepository(Cart) private readonly cartsRepository: Repository<Cart>,
-    private readonly entityManager: EntityManager,
   ) {}
 
   create(createCartDto: CreateCartDto) {
     const item = new Cart(createCartDto);
 
-    const newCart = this.entityManager.save(item);
+    const newCart = this.cartsRepository.save(item);
 
     return newCart;
   }

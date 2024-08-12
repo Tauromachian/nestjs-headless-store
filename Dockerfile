@@ -4,6 +4,7 @@ FROM base as builder
 WORKDIR /app
 
 ENV APP_ENV production
+RUN corepack enable
 
 COPY package.json yarn.lock
 RUN yarn

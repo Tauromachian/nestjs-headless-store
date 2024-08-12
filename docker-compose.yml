@@ -22,7 +22,8 @@ services:
       DATABASE_USER: nest_user
       DATABASE_PASSWORD: nest_password
       DATABASE_NAME: nest_db
-    ports: 3000:3000
+    ports:
+      - 3000:3000
 
     depends_on:
       - postgres

@@ -36,6 +36,8 @@ export class Item {
   @ManyToMany(() => Category, (category) => category.items)
   categories: Category[];
 
-  @OneToMany(() => CartItem, (cartItem) => cartItem.item)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.item, {
+    cascade: ['remove'],
+  })
   cartItems: CartItem[];
 }

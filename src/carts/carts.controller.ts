@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
@@ -13,7 +22,9 @@ export class CartsController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Query('include') include: 'items' | undefined) {
+    if (include === 'items') return this.cartsService.findAll(include);
+
     return this.cartsService.findAll();
   }
 

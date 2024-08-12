@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import {
   registerDecorator,
   ValidationArguments,
@@ -13,7 +12,7 @@ import { EntityManager } from 'typeorm';
 export class IsInDatabaseConstraint implements ValidatorConstraintInterface {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async validate(value: string, args: ValidationArguments) {
+  async validate(value: unknown, args: ValidationArguments) {
     const [EntityClass, property = 'id'] = args.constraints;
 
     const repository = this.entityManager.getRepository(EntityClass);

@@ -21,7 +21,13 @@ export class CartsService {
     return newCart;
   }
 
-  async findAll() {
+  async findAll(include?: string) {
+    if (include) {
+      return this.cartsRepository.find({
+        relations: ['cartItems', 'cartItems.item'],
+      });
+    }
+
     return this.cartsRepository.find();
   }
 

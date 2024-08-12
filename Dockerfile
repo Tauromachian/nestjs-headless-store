@@ -6,7 +6,7 @@ WORKDIR /app
 ENV APP_ENV production
 RUN corepack enable
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 RUN corepack yarn install --frozen-lockfile
 
 COPY . .

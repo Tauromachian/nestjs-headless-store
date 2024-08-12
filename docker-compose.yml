@@ -20,7 +20,7 @@ services:
       APP_ENV: production
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: nest_user
+      DB_USERNAME: nest_user
       DB_PASSWORD: nest_password
       DB_NAME: nest_db
     ports:

@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Item } from 'src/items/entities/item.entity';
@@ -15,9 +21,17 @@ export class CartItem {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Cart, (cart) => cart.cartItems)
+  @ManyToOne(() => Cart, (cart) => cart.cartItems, { cascade: ['insert'] })
+  @JoinColumn({ name: 'cartId' })
   cart: Cart;
 
-  @ManyToOne(() => Item, (item) => item.cartItems)
+  @Column()
+  cartId: number;
+
+  @ManyToOne(() => Item, (item) => item.cartItems, { cascade: ['insert'] })
+  @JoinColumn({ name: 'itemId' })
   item: Item;
+
+  @Column()
+  itemId: number;
 }

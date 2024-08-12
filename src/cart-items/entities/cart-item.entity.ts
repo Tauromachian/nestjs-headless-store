@@ -21,14 +21,14 @@ export class CartItem {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Cart, (cart) => cart.cartItems, { cascade: ['insert'] })
+  @ManyToOne(() => Cart, (cart) => cart.cartItems, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cartId' })
   cart: Cart;
 
   @Column()
   cartId: number;
 
-  @ManyToOne(() => Item, (item) => item.cartItems, { cascade: ['insert'] })
+  @ManyToOne(() => Item, (item) => item.cartItems, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'itemId' })
   item: Item;
 

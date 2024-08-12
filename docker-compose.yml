@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: nest_headless_store_db
+    environment:
+      POSTGRES_USER: nest_user
+      POSTGRES_PASSWORD: nest_password
+      POSTGRES_DB: nest_db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nest:
+    build: .
+    container_name: nest_headless_store_app
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: nest_user
+      DATABASE_PASSWORD: nest_password
+      DATABASE_NAME: nest_db
+    ports:
+      - 3000:3000
+
+    depends_on: postgres
+
+volumes:
+  - postgres_data

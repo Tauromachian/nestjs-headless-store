@@ -21,4 +21,4 @@ COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3000
 ENV APP_PORT 3000
 
-CMD ["node", "main.js"]
+CMD ["node", "dist/main.js"]

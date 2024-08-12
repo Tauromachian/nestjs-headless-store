@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -10,13 +10,12 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly itemsRepository: Repository<Category>,
-    private readonly entityManager: EntityManager,
   ) {}
 
   create(createCategoryDto: CreateCategoryDto) {
     const item = new Category(createCategoryDto);
 
-    const newCategory = this.entityManager.save(item);
+    const newCategory = this.itemsRepository.save(item);
 
     return newCategory;
   }

@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { EntityManager, QueryFailedError, Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash } from 'bcrypt';
 
@@ -20,7 +20,6 @@ import { dbErrorCodes } from 'src/database/constants';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
-    private readonly entityManager: EntityManager,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -32,7 +31,7 @@ export class UsersService {
     let newUser: User;
 
     try {
-      newUser = await this.entityManager.save(user);
+      newUser = await this.usersRepository.save(user);
     } catch (error) {
       if (!(error instanceof QueryFailedError)) {
         throw new InternalServerErrorException('Unexpected error ocurred');

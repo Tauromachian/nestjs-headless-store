@@ -13,7 +13,7 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
+import { ResponseCategoryDto } from './dto/response-category.dto';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -25,7 +25,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 201,
     description: 'The category has been successfully created.',
-    type: Category,
+    type: ResponseCategoryDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -37,7 +37,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'Return all categories.',
-    type: [Category],
+    type: [ResponseCategoryDto],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll() {
@@ -50,7 +50,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'Return the category with the specified ID.',
-    type: Category,
+    type: ResponseCategoryDto,
   })
   @ApiResponse({ status: 404, description: 'Category not found' })
   findOne(@Param('id') id: string) {
@@ -63,7 +63,7 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'The category has been successfully updated.',
-    type: Category,
+    type: ResponseCategoryDto,
   })
   @ApiResponse({ status: 404, description: 'Category not found' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

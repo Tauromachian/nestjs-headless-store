@@ -21,6 +21,7 @@ import { CartsService } from './carts.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
+import { ResponseCartDto } from './dto/response-cart.dto';
 
 @ApiTags('carts') // Group your routes under the 'carts' tag in Swagger
 @Controller('carts')
@@ -32,7 +33,7 @@ export class CartsController {
   @ApiResponse({
     status: 201,
     description: 'The cart has been successfully created.',
-    type: Cart,
+    type: ResponseCartDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body() createCartDto: CreateCartDto) {
@@ -41,7 +42,11 @@ export class CartsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all carts' })
-  @ApiResponse({ status: 200, description: 'Return all carts.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all carts.',
+    type: [ResponseCartDto],
+  })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll(@Query('include') include: 'items' | undefined) {
     if (include === 'items') return this.cartsService.findAll(include);
@@ -52,7 +57,11 @@ export class CartsController {
   @Get(':id')
   @ApiOperation({ summary: 'Get a cart by ID' })
   @ApiParam({ name: 'id', description: 'The ID of the cart' })
-  @ApiResponse({ status: 200, description: 'Return the cart.', type: Cart })
+  @ApiResponse({
+    status: 200,
+    description: 'Return the cart.',
+    type: ResponseCartDto,
+  })
   @ApiResponse({ status: 404, description: 'Cart not found' })
   findOne(@Param('id') id: string) {
     return this.cartsService.findOne(+id);
@@ -65,7 +74,7 @@ export class CartsController {
   @ApiResponse({
     status: 200,
     description: 'The cart has been successfully updated.',
-    type: Cart,
+    type: ResponseCartDto,
   })
   @ApiResponse({ status: 404, description: 'Cart not found' })
   update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {

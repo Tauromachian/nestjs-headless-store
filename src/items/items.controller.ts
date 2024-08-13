@@ -13,7 +13,8 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { Item } from './entities/item.entity';
+import { ResponseItemDto } from './dto/response-item.dto';
+import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 
 @ApiTags('items')
 @Controller('items')
@@ -25,7 +26,7 @@ export class ItemsController {
   @ApiResponse({
     status: 201,
     description: 'The item has been successfully created.',
-    type: Item,
+    type: ResponseItemDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body() createItemDto: CreateItemDto) {
@@ -37,7 +38,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return all items.',
-    type: [Item],
+    type: [ResponseCategoryDto],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll() {
@@ -50,7 +51,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return the item with the specified ID.',
-    type: Item,
+    type: ResponseCategoryDto,
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
   findOne(@Param('id') id: string) {
@@ -63,7 +64,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'The item has been successfully updated.',
-    type: Item,
+    type: ResponseCategoryDto,
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

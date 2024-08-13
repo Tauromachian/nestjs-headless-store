@@ -13,7 +13,7 @@ export class CartsService {
   ) {}
 
   create(createCartDto: CreateCartDto) {
-    const item = new Cart(createCartDto);
+    const item = this.cartsRepository.create(createCartDto);
 
     const newCart = this.cartsRepository.save(item);
 

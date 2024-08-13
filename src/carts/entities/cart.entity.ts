@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
@@ -19,8 +20,11 @@ export class Cart {
   id: number;
 
   @OneToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user: User;
+
+  @Column()
+  userId: number;
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.cart, {
     cascade: ['remove'],

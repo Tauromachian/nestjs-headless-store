@@ -11,10 +11,6 @@ import { Item } from 'src/items/entities/item.entity';
 
 @Entity()
 export class CartItem {
-  constructor(cartItem: Partial<CartItem>) {
-    Object.assign(this, cartItem);
-  }
-
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -7,10 +7,6 @@ export enum Role {
 
 @Entity()
 export class User {
-  constructor(item: Partial<User>) {
-    Object.assign(this, item);
-  }
-
   @PrimaryGeneratedColumn()
   id: number;
 

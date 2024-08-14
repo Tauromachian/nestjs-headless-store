@@ -11,10 +11,6 @@ import { Category } from 'src/categories/entities/category.entity';
 
 @Entity()
 export class Item {
-  constructor(item: Partial<Item>) {
-    Object.assign(this, item);
-  }
-
   @PrimaryGeneratedColumn()
   id: number;
 

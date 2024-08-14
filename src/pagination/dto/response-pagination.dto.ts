@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
 
-export class PaginationDto<G> {
+export class ResponsePaginationDto<G> {
   @IsNumber()
   total: number;
 

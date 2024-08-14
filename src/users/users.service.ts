@@ -23,7 +23,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = new User({
+    const user = this.usersRepository.create({
       ...createUserDto,
       password: await hash(createUserDto.password, SALT_ROUNDS),
     });

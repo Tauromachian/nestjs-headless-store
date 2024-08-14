@@ -13,7 +13,7 @@ export class CategoriesService {
   ) {}
 
   create(createCategoryDto: CreateCategoryDto) {
-    const item = new Category(createCategoryDto);
+    const item = this.itemsRepository.create(createCategoryDto);
 
     const newCategory = this.itemsRepository.save(item);
 

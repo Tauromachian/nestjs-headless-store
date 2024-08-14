@@ -4,6 +4,9 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { paginate } from 'src/pagination/helpers';
 
 @Injectable()
 export class ItemsService {
@@ -19,8 +22,10 @@ export class ItemsService {
     return newItem;
   }
 
-  async findAll() {
-    return this.itemsRepository.find();
+  async findAll(
+    paginationDto: QueryPaginationDto,
+  ): Promise<ResponsePaginationDto<Item>> {
+    return paginate(this.itemsRepository, paginationDto);
   }
 
   async findOne(id: number) {

@@ -15,7 +15,7 @@ export class ItemsService {
   ) {}
 
   create(createItemDto: CreateItemDto) {
-    const item = new Item(createItemDto);
+    const item = this.itemsRepository.create(createItemDto);
 
     const newItem = this.itemsRepository.save(item);
 

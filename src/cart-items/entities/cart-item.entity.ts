@@ -1,19 +1,11 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Item } from 'src/items/entities/item.entity';
+import { Base } from 'src/shared/entities/base.entity';
 
 @Entity()
-export class CartItem {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class CartItem extends Base {
   @Column()
   quantity: number;
 

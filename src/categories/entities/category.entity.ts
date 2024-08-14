@@ -1,18 +1,10 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, JoinTable } from 'typeorm';
 
 import { Item } from 'src/items/entities/item.entity';
+import { Base } from 'src/shared/entities/base.entity';
 
 @Entity()
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Category extends Base {
   @Column()
   name: string;
 

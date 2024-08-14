@@ -16,6 +16,9 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { ResponseItemDto } from './dto/response-item.dto';
 import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+
 @ApiTags('items')
 @Controller('items')
 export class ItemsController {
@@ -41,8 +44,8 @@ export class ItemsController {
     type: [ResponseCategoryDto],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll() {
-    return this.itemsService.findAll();
+  findAll(@Paginate() paginationDto: QueryPaginationDto) {
+    return this.itemsService.findAll(paginationDto);
   }
 
   @Get(':id')

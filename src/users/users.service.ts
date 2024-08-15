@@ -56,8 +56,18 @@ export class UsersService {
     return paginate(this.usersRepository, paginationDto);
   }
 
-  async findOne(email: string) {
-    const user = await this.usersRepository.findOne({ where: { email } });
+  async findOne(email: string, selectPassword?: boolean) {
+    const queryBuilder = this.usersRepository.createQueryBuilder();
+
+    let user = null;
+    if (selectPassword) {
+      user = queryBuilder.select('*').where({ email }).getRawOne();
+    } else {
+      user = queryBuilder
+        .select(['id', 'name', 'email', 'role', 'createdAt', 'updatedAt'])
+        .where({ email })
+        .getRawOne();
+    }
 
     if (!user) throw new NotFoundException();
 

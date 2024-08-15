@@ -6,6 +6,9 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 
 import { CartItem } from './entities/cart-item.entity';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { paginate } from 'src/pagination/helpers';
 
 @Injectable()
 export class CartItemsService {
@@ -22,8 +25,10 @@ export class CartItemsService {
     return newCartItem;
   }
 
-  async findAll() {
-    return this.cartItemsRepository.find();
+  async findAll(
+    paginationDto: QueryPaginationDto,
+  ): Promise<ResponsePaginationDto<CartItem>> {
+    return paginate(this.cartItemsRepository, paginationDto);
   }
 
   async findOne(id: number) {

@@ -13,8 +13,10 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CartItemsService } from './cart-items.service';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
-import { CartItem } from './entities/cart-item.entity';
 import { ResponseCartItemDto } from './dto/response-cart-item.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { Paginate } from 'src/pagination/decorator/pagination.decorator';
 
 @ApiTags('cart-items')
 @Controller('cart-items')
@@ -38,11 +40,11 @@ export class CartItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return all cart items.',
-    type: [ResponseCartItemDto],
+    type: [ResponsePaginationDto<ResponseCartItemDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll() {
-    return this.cartItemsService.findAll();
+  findAll(@Paginate() paginationDto: QueryPaginationDto) {
+    return this.cartItemsService.findAll(paginationDto);
   }
 
   @Get(':id')

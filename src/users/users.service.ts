@@ -15,6 +15,9 @@ import { User } from './entities/user.entity';
 
 import { SALT_ROUNDS } from './constants';
 import { dbErrorCodes } from 'src/database/constants';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { paginate } from 'src/pagination/helpers';
 
 @Injectable()
 export class UsersService {
@@ -47,8 +50,10 @@ export class UsersService {
     return newUser;
   }
 
-  async findAll() {
-    return this.usersRepository.find();
+  async findAll(
+    paginationDto: QueryPaginationDto,
+  ): Promise<ResponsePaginationDto<User>> {
+    return paginate(this.usersRepository, paginationDto);
   }
 
   async findOne(email: string) {

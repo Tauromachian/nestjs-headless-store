@@ -12,6 +12,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseUserDto } from './dto/response-user.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { Paginate } from 'src/pagination/decorator/pagination.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -36,11 +40,11 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'List of all users',
-    type: [ResponseUserDto],
+    type: [ResponsePaginationDto<ResponseCategoryDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Paginate() paginationDto: QueryPaginationDto) {
+    return this.usersService.findAll(paginationDto);
   }
 
   @Get(':email')

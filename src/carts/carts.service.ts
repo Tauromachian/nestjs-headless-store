@@ -5,6 +5,9 @@ import { UpdateCartDto } from './dto/update-cart.dto';
 import { Cart } from './entities/cart.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { paginate } from 'src/pagination/helpers';
 
 @Injectable()
 export class CartsService {
@@ -20,14 +23,19 @@ export class CartsService {
     return newCart;
   }
 
-  async findAll(include?: string) {
+  async findAll(
+    paginationDto: QueryPaginationDto,
+    include?: string,
+  ): Promise<ResponsePaginationDto<Cart>> {
+    const queryBuilder = this.cartsRepository.createQueryBuilder();
+
     if (include) {
-      return this.cartsRepository.find({
-        relations: ['cartItems', 'cartItems.item'],
-      });
+      queryBuilder.relation('cartItems').relation('cartItems.item');
+
+      return paginate(queryBuilder, paginationDto);
     }
 
-    return this.cartsRepository.find();
+    return paginate(this.cartsRepository, paginationDto);
   }
 
   async findOne(id: number) {

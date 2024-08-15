@@ -20,8 +20,10 @@ import {
 import { CartsService } from './carts.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
-import { Cart } from './entities/cart.entity';
 import { ResponseCartDto } from './dto/response-cart.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { Paginate } from 'src/pagination/decorator/pagination.decorator';
 
 @ApiTags('carts') // Group your routes under the 'carts' tag in Swagger
 @Controller('carts')
@@ -45,13 +47,17 @@ export class CartsController {
   @ApiResponse({
     status: 200,
     description: 'Return all carts.',
-    type: [ResponseCartDto],
+    type: [ResponsePaginationDto<ResponseCartDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll(@Query('include') include: 'items' | undefined) {
-    if (include === 'items') return this.cartsService.findAll(include);
+  findAll(
+    @Paginate() paginationDto: QueryPaginationDto,
+    @Query('include') include: 'items' | undefined,
+  ) {
+    if (include === 'items')
+      return this.cartsService.findAll(paginationDto, include);
 
-    return this.cartsService.findAll();
+    return this.cartsService.findAll(paginationDto);
   }
 
   @Get(':id')

@@ -14,6 +14,9 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ResponseCategoryDto } from './dto/response-category.dto';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { Paginate } from 'src/pagination/decorator/pagination.decorator';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -37,11 +40,11 @@ export class CategoriesController {
   @ApiResponse({
     status: 200,
     description: 'Return all categories.',
-    type: [ResponseCategoryDto],
+    type: [ResponsePaginationDto<ResponseCategoryDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Paginate() paginationDto: QueryPaginationDto) {
+    return this.categoriesService.findAll(paginationDto);
   }
 
   @Get(':id')

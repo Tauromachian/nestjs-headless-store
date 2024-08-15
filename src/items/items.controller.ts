@@ -18,6 +18,7 @@ import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 
 @ApiTags('items')
 @Controller('items')
@@ -41,7 +42,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return all items.',
-    type: [ResponseCategoryDto],
+    type: [ResponsePaginationDto<ResponseCategoryDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll(@Paginate() paginationDto: QueryPaginationDto) {

@@ -1,12 +1,15 @@
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryPaginationDto } from './dto/query-pagination.dto';
 import { ResponsePaginationDto } from './dto/response-pagination.dto';
 
 export async function paginate<G>(
-  repository: Repository<G>,
+  repository: Repository<G> | SelectQueryBuilder<G>,
   paginationDto: QueryPaginationDto,
 ): Promise<ResponsePaginationDto<G>> {
-  const queryBuilder = repository.createQueryBuilder();
+  const queryBuilder =
+    repository instanceof Repository
+      ? repository.createQueryBuilder()
+      : repository;
 
   const [data, count] = await queryBuilder
     .limit(paginationDto.limit)

@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from './database/database.module';
-import { ItemsModule } from './items/items.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { JwtModule } from '@nestjs/jwt';
+
+import { ItemsModule } from './items/items.module';
+import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { CartsModule } from './carts/carts.module';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
+
+import { AuthGuard } from './auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -21,6 +25,14 @@ import { CartItemsModule } from './cart-items/cart-items.module';
         limit: 60,
       },
     ]),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('APP_SECRET'),
+        signOptions: { expiresIn: '60s' },
+      }),
+    }),
+
     UsersModule,
     CartsModule,
     CategoriesModule,
@@ -31,6 +43,10 @@ import { CartItemsModule } from './cart-items/cart-items.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })

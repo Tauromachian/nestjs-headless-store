@@ -29,7 +29,12 @@ import { AuthGuard } from './auth/guards/auth.guard';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('APP_SECRET'),
-        signOptions: { expiresIn: '60s' },
+        signOptions: {
+          expiresIn:
+            configService.get<string>('APP_ENV') === 'dev'
+              ? '7200s'
+              : (configService.get<string>('APP_JWT_EXPIRATION_TIME') ?? '60s'),
+        },
       }),
     }),
 

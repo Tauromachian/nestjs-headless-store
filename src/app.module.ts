@@ -32,7 +32,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
         signOptions: {
           expiresIn:
             configService.get<string>('APP_ENV') === 'dev'
-              ? '7200s'
+              ? '72000s'
               : (configService.get<string>('APP_JWT_EXPIRATION_TIME') ?? '60s'),
         },
       }),

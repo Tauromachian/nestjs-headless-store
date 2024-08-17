@@ -45,11 +45,7 @@ export class ItemsService {
 
     if (updateResult.affected === 0) throw new NotFoundException();
 
-    const item = await this.itemsRepository.findOneBy({ id });
-
-    if (!item) throw new NotFoundException();
-
-    return item;
+    return this.findOne(id);
   }
 
   async remove(id: number) {

@@ -41,7 +41,15 @@ export class ItemsService {
     id: number,
     updateItemDto: UpdateItemDto,
   ): Promise<ResponseItemDto> {
-    return this.itemsRepository.save({ id, ...updateItemDto });
+    const updateResult = await this.itemsRepository.update(id, updateItemDto);
+
+    if (updateResult.affected === 0) throw new NotFoundException();
+
+    const item = await this.itemsRepository.findOneBy({ id });
+
+    if (!item) throw new NotFoundException();
+
+    return item;
   }
 
   async remove(id: number) {

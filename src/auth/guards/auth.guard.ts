@@ -42,9 +42,9 @@ export class AuthGuard implements CanActivate {
     const userRole = payload.role;
     if (userRole === Role.ADMIN) return true;
 
-    const routeRole = this.getRouteRole(context);
+    if (this.getRouteRole(context) === Role.ADMIN) return false;
 
-    return routeRole === payload.role;
+    return true;
   }
 
   private getRouteRole(context: ExecutionContext): Role {

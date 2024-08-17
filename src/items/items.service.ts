@@ -15,7 +15,7 @@ export class ItemsService {
     @InjectRepository(Item) private readonly itemsRepository: Repository<Item>,
   ) {}
 
-  create(createItemDto: CreateItemDto) {
+  create(createItemDto: CreateItemDto): Promise<ResponseItemDto> {
     const item = this.itemsRepository.create(createItemDto);
 
     const newItem = this.itemsRepository.save(item);
@@ -29,7 +29,7 @@ export class ItemsService {
     return paginate(this.itemsRepository, paginationDto);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<ResponseItemDto> {
     const item = await this.itemsRepository.findOne({ where: { id } });
 
     if (!item) throw new NotFoundException();
@@ -37,7 +37,10 @@ export class ItemsService {
     return item;
   }
 
-  async update(id: number, updateItemDto: UpdateItemDto) {
+  async update(
+    id: number,
+    updateItemDto: UpdateItemDto,
+  ): Promise<ResponseItemDto> {
     return this.itemsRepository.save({ id, ...updateItemDto });
   }
 

@@ -115,5 +115,34 @@ describe('ItemsController', () => {
         }
       });
     });
+    describe('update', () => {
+      it('Should update correctly', async () => {
+        const updated: ResponseItemDto = {
+          id: 1,
+          name: 'test2',
+          price: 10,
+          quantity: 10,
+          currency: 'USD',
+          description: 'test1',
+        };
+
+        jest.spyOn(service, 'update').mockResolvedValue(updated);
+
+        expect(await controller.update('1', updated)).toBe(updated);
+        expect(service.update).toHaveBeenCalledWith(1, updated);
+      });
+
+      it('Should return 404 if item is not found', async () => {
+        jest.spyOn(service, 'update').mockResolvedValue(null);
+
+        try {
+          await controller.update('2', {});
+        } catch (error) {
+          expect(error).toBeInstanceOf(NotFoundError);
+          expect(error.status).toBe(404);
+          expect(error?.message).toBe('Item not found');
+        }
+      });
+    });
   });
 });

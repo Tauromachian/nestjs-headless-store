@@ -11,6 +11,7 @@ import { ResponseItemDto } from './dto/response-item.dto';
 import { CreateItemDto } from './dto/create-item.dto';
 
 import { Item } from './entities/item.entity';
+import { NotFoundError } from 'rxjs';
 
 describe('ItemsController', () => {
   let controller: ItemsController;

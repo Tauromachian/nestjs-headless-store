@@ -87,5 +87,22 @@ describe('ItemsController', () => {
 
       expect(await controller.findAll(paginationRequest)).toBe(result);
     });
+
+    describe('findOne', () => {
+      it('Should return one item correctly', async () => {
+        const result: ResponseItemDto = {
+          id: 1,
+          name: 'test1',
+          price: 10,
+          quantity: 10,
+          currency: 'USD',
+          description: 'test1',
+        };
+
+        jest.spyOn(service, 'findOne').mockImplementation(async () => result);
+
+        expect(await controller.findOne('1')).toBe(result);
+      });
+    });
   });
 });

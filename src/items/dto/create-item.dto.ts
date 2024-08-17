@@ -6,7 +6,7 @@ export class CreateItemDto {
     description: 'The name of the item',
     example: 'Laptop',
   })
-  @IsNumber()
+  @IsString()
   name: string;
 
   @ApiProperty({

@@ -103,6 +103,17 @@ describe('ItemsController', () => {
 
         expect(await controller.findOne('1')).toBe(result);
       });
+      it('Should throw an error if item not found', async () => {
+        jest.spyOn(service, 'findOne').mockResolvedValue(null);
+
+        try {
+          await controller.findOne('2');
+        } catch (error) {
+          expect(error).toBeInstanceOf(NotFoundError);
+          expect(error.status).toBe(404);
+          expect(error?.message).toBe('Item not found');
+        }
+      });
     });
   });
 });

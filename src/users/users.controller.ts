@@ -16,9 +16,12 @@ import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dt
 import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+import { RoleGuard } from 'src/auth/decorators/roles.decorator';
+import { Role } from './entities/user.entity';
 
 @ApiTags('users')
 @Controller('users')
+@RoleGuard(Role.ADMIN)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

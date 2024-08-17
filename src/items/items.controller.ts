@@ -14,7 +14,6 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ResponseItemDto } from './dto/response-item.dto';
-import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { Paginate } from 'src/pagination/decorator/pagination.decorator';
@@ -42,7 +41,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return all items.',
-    type: [ResponsePaginationDto<ResponseCategoryDto>],
+    type: [ResponsePaginationDto<ResponseItemDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll(@Paginate() paginationDto: QueryPaginationDto) {
@@ -55,7 +54,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'Return the item with the specified ID.',
-    type: ResponseCategoryDto,
+    type: ResponseItemDto,
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
   findOne(@Param('id') id: string) {
@@ -68,7 +67,7 @@ export class ItemsController {
   @ApiResponse({
     status: 200,
     description: 'The item has been successfully updated.',
-    type: ResponseCategoryDto,
+    type: ResponseItemDto,
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
   @ApiResponse({ status: 400, description: 'Bad Request' })

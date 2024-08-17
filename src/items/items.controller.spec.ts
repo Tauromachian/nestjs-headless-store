@@ -1,12 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { ItemsController } from './items.controller';
 import { ItemsService } from './items.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Item } from './entities/item.entity';
-import { Repository } from 'typeorm';
+
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
-import { ResponseItemDto } from './dto/response-item.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
+import { ResponseItemDto } from './dto/response-item.dto';
+import { CreateItemDto } from './dto/create-item.dto';
+
+import { Item } from './entities/item.entity';
 
 describe('ItemsController', () => {
   let controller: ItemsController;
@@ -27,6 +31,31 @@ describe('ItemsController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('Should create a new item', async () => {
+      const createItemDto: CreateItemDto = {
+        name: 'test1',
+        price: 10,
+        quantity: 10,
+        currency: 'USD',
+        description: 'test1',
+      };
+
+      const result: ResponseItemDto = {
+        id: 1,
+        name: 'test1',
+        price: 10,
+        quantity: 10,
+        currency: 'USD',
+        description: 'test1',
+      };
+
+      jest.spyOn(service, 'create').mockImplementation(async () => result);
+
+      expect(await controller.create(createItemDto)).toBe(result);
+    });
   });
 
   describe('findAll', () => {

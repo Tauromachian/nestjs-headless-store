@@ -56,9 +56,7 @@ describe('ItemsController', () => {
 
       jest.spyOn(service, 'findAll').mockImplementation(async () => result);
 
-      console.log(await controller.findAll(paginationRequest));
-
-      expect(await controller.findAll({})).toBe(result);
+      expect(await controller.findAll(paginationRequest)).toBe(result);
     });
   });
 });

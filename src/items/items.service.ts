@@ -37,8 +37,8 @@ export class ItemsService {
     return item;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return this.itemsRepository.update(id, updateItemDto);
+  async update(id: number, updateItemDto: UpdateItemDto) {
+    return this.itemsRepository.save({ id, ...updateItemDto });
   }
 
   async remove(id: number) {

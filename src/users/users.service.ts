@@ -18,6 +18,7 @@ import { dbErrorCodes } from 'src/database/constants';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { paginate } from 'src/pagination/helpers';
+import { ResponseUserDto } from './dto/response-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -74,8 +75,17 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.update(id, updateUserDto);
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<ResponseUserDto> {
+    const updateResult = await this.usersRepository.update(id, updateUserDto);
+
+    if (updateResult.affected === 0) throw new NotFoundException();
+
+    const user = await this.usersRepository.findOneBy({ id });
+
+    return user;
   }
 
   async remove(id: number) {

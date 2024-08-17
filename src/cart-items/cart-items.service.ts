@@ -9,6 +9,7 @@ import { CartItem } from './entities/cart-item.entity';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { paginate } from 'src/pagination/helpers';
+import { ResponseCartItemDto } from './dto/response-cart-item.dto';
 
 @Injectable()
 export class CartItemsService {
@@ -39,8 +40,18 @@ export class CartItemsService {
     return item;
   }
 
-  update(id: number, updateCartItemDto: UpdateCartItemDto) {
-    return this.cartItemsRepository.update(id, updateCartItemDto);
+  async update(
+    id: number,
+    updateCartItemDto: UpdateCartItemDto,
+  ): Promise<ResponseCartItemDto> {
+    const updateResult = await this.cartItemsRepository.update(
+      id,
+      updateCartItemDto,
+    );
+
+    if (updateResult.affected === 0) throw new NotFoundException();
+
+    return this.findOne(id);
   }
 
   async remove(id: number) {

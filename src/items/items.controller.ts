@@ -57,7 +57,7 @@ export class ItemsController {
     type: ResponseItemDto,
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<ResponseItemDto> {
     return this.itemsService.findOne(+id);
   }
 
@@ -71,7 +71,10 @@ export class ItemsController {
   })
   @ApiResponse({ status: 404, description: 'Item not found' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateItemDto: UpdateItemDto,
+  ): Promise<ResponseItemDto> {
     return this.itemsService.update(+id, updateItemDto);
   }
 

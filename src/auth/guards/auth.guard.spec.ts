@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthGuard } from './auth.guard';
 import { Reflector } from '@nestjs/core';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Role } from 'src/users/entities/user.entity';
 
 function createMockExecutionContext(
   request: Partial<Request> = {},
@@ -28,9 +29,10 @@ function createMockExecutionContext(
 describe('auth.guard', () => {
   let guard: AuthGuard;
   let reflector: Reflector;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         AuthGuard,
         ConfigService,
@@ -89,5 +91,20 @@ describe('auth.guard', () => {
       expect(error).toBeDefined();
       expect(error instanceof UnauthorizedException).toBe(true);
     }
+  });
+
+  it('Should allow access if user is an admin', async () => {
+    const jwtService = module.get<JwtService>(JwtService);
+
+    const mockRequest = {
+      headers: { authorization: 'Bearer valid-token' },
+    } as unknown as Partial<Request>;
+
+    jest.spyOn(jwtService, 'verifyAsync').mockImplementation(async (_, _1) => ({
+      role: Role.ADMIN,
+    }));
+
+    const executionContext = createMockExecutionContext(mockRequest);
+    expect(await guard.canActivate(executionContext)).toBe(true);
   });
 });

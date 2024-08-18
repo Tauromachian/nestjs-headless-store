@@ -124,4 +124,21 @@ describe('auth.guard', () => {
     const executionContext = createMockExecutionContext(mockRequest);
     expect(await guard.canActivate(executionContext)).toBe(false);
   });
+
+  it('Should allow access to customer to the customer routes', async () => {
+    const jwtService = module.get<JwtService>(JwtService);
+
+    const mockRequest = {
+      headers: { authorization: 'Bearer valid-token' },
+    } as unknown as Partial<Request>;
+
+    jest.spyOn(jwtService, 'verifyAsync').mockImplementation(async () => ({
+      role: Role.CUSTOMER,
+    }));
+
+    jest.spyOn(reflector, 'get').mockReturnValue(Role.CUSTOMER);
+
+    const executionContext = createMockExecutionContext(mockRequest);
+    expect(await guard.canActivate(executionContext)).toBe(true);
+  });
 });

@@ -63,6 +63,21 @@ describe('auth.guard', () => {
 
   it('Should throw UnauthorizedException if no token is found in the request', async () => {
     const mockRequest = {
+      headers: {},
+    } as unknown as Partial<Request>;
+
+    const executionContext = createMockExecutionContext(mockRequest);
+
+    try {
+      await guard.canActivate(executionContext);
+    } catch (error) {
+      expect(error).toBeDefined();
+      expect(error instanceof UnauthorizedException).toBe(true);
+    }
+  });
+
+  it('Should throw UnauthorizedException if token sign is incorrect', async () => {
+    const mockRequest = {
       headers: { authorization: 'Bearer valid-token' },
     } as unknown as Partial<Request>;
 

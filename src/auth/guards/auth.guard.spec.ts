@@ -100,7 +100,7 @@ describe('auth.guard', () => {
       headers: { authorization: 'Bearer valid-token' },
     } as unknown as Partial<Request>;
 
-    jest.spyOn(jwtService, 'verifyAsync').mockImplementation(async (_, _1) => ({
+    jest.spyOn(jwtService, 'verifyAsync').mockImplementation(async () => ({
       role: Role.ADMIN,
     }));
 

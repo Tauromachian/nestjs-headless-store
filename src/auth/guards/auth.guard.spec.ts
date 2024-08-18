@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthGuard } from './auth.guard';
 import { Reflector } from '@nestjs/core';
-import { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 
 function createMockExecutionContext(
   request: Partial<Request> = {},
@@ -59,5 +59,20 @@ describe('auth.guard', () => {
     const executionContext = createMockExecutionContext();
 
     expect(await guard.canActivate(executionContext)).toBe(true);
+  });
+
+  it('Should throw UnauthorizedException if no token is found in the request', async () => {
+    const mockRequest = {
+      headers: { authorization: 'Bearer valid-token' },
+    } as unknown as Partial<Request>;
+
+    const executionContext = createMockExecutionContext(mockRequest);
+
+    try {
+      await guard.canActivate(executionContext);
+    } catch (error) {
+      expect(error).toBeDefined();
+      expect(error instanceof UnauthorizedException).toBe(true);
+    }
   });
 });

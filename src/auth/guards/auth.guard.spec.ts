@@ -107,4 +107,21 @@ describe('auth.guard', () => {
     const executionContext = createMockExecutionContext(mockRequest);
     expect(await guard.canActivate(executionContext)).toBe(true);
   });
+
+  it('Should stop access if the user is not an admin and the route requires admin access', async () => {
+    const jwtService = module.get<JwtService>(JwtService);
+
+    const mockRequest = {
+      headers: { authorization: 'Bearer valid-token' },
+    } as unknown as Partial<Request>;
+
+    jest.spyOn(jwtService, 'verifyAsync').mockImplementation(async () => ({
+      role: Role.CUSTOMER,
+    }));
+
+    jest.spyOn(reflector, 'get').mockReturnValue(Role.ADMIN);
+
+    const executionContext = createMockExecutionContext(mockRequest);
+    expect(await guard.canActivate(executionContext)).toBe(false);
+  });
 });

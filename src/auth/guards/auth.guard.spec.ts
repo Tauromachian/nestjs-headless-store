@@ -53,7 +53,7 @@ describe('auth.guard', () => {
     expect(guard).toBeDefined();
   });
 
-  it('should return true', async () => {
+  it('Should allow access if a @Public decorator is found', async () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true);
 
     const executionContext = createMockExecutionContext();

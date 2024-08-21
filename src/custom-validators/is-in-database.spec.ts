@@ -53,4 +53,24 @@ describe('IsInDatabaseConstraint', () => {
       false,
     );
   });
+
+  it('should return true if findOne returns', async () => {
+    const mockRepository = {
+      findOne: jest.fn().mockResolvedValue({ test: 'value' }),
+    };
+
+    jest
+      .spyOn(entityManager, 'getRepository')
+      .mockReturnValue(mockRepository as unknown as Repository<unknown>);
+
+    const validationArgs: ValidationArguments = {
+      value: 2,
+      property: 'id',
+      constraints: [Object, 'id'],
+      targetName: '',
+      object: {},
+    };
+
+    expect(await isInDatabaseConstraint.validate(1, validationArgs)).toBe(true);
+  });
 });

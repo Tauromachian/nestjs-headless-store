@@ -8,32 +8,32 @@ import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { queryValues } from '../dto/constants';
 
-export const Paginate = createParamDecorator(
-  (_, ctx: ExecutionContext): QueryPaginationDto => {
-    const request = ctx.switchToHttp().getRequest();
-    const query = request.query;
+export const Paginate = createParamDecorator(paginateDecoratorFunction);
 
-    if (!Object.keys(query)) return {};
+export function paginateDecoratorFunction(_: null, ctx: ExecutionContext) {
+  const request = ctx.switchToHttp().getRequest();
+  const query = request.query;
 
-    const paginationObject = {
-      limit: query?.limit !== undefined ? +query.limit : queryValues.LIMIT,
-      page: query?.page !== undefined ? +query.page : queryValues.PAGE,
-    };
+  if (!Object.keys(query)) return {};
 
-    const queryDto = plainToInstance(QueryPaginationDto, paginationObject);
-    const errors = validateSync(queryDto);
+  const paginationObject = {
+    limit: query?.limit !== undefined ? +query.limit : queryValues.LIMIT,
+    page: query?.page !== undefined ? +query.page : queryValues.PAGE,
+  };
 
-    if (errors.length === 0) return queryDto;
+  const queryDto = plainToInstance(QueryPaginationDto, paginationObject);
+  const errors = validateSync(queryDto);
 
-    if (errors.length === 1) {
-      throw new BadRequestException(errors[0].toString());
-    }
+  if (errors.length === 0) return queryDto;
 
-    const errorMessages = [];
-    for (const error of errors) {
-      errorMessages.push(error.toString());
-    }
+  if (errors.length === 1) {
+    throw new BadRequestException(errors[0].toString());
+  }
 
-    throw new BadRequestException(errorMessages);
-  },
-);
+  const errorMessages = [];
+  for (const error of errors) {
+    errorMessages.push(error.toString());
+  }
+
+  throw new BadRequestException(errorMessages);
+}

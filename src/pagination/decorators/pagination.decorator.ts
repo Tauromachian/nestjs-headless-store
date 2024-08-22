@@ -26,6 +26,8 @@ export function paginateDecoratorFunction(_: null, ctx: ExecutionContext) {
   const queryDto = plainToInstance(QueryPaginationDto, paginationObject);
   const errors = validateSync(queryDto);
 
+  if (errors.length === 0) return queryDto;
+
   const errorMessages = formatErrorsMessages(errors);
   throw new BadRequestException(errorMessages);
 }

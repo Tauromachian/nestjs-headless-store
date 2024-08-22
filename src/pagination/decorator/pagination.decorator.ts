@@ -3,10 +3,12 @@ import {
   createParamDecorator,
   ExecutionContext,
 } from '@nestjs/common';
-import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
+
+import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { queryValues } from '../dto/constants';
+import { formatErrorMessages } from 'src/shared/utils';
 
 export const Paginate = createParamDecorator(paginateDecoratorFunction);
 
@@ -24,16 +26,6 @@ export function paginateDecoratorFunction(_: null, ctx: ExecutionContext) {
   const queryDto = plainToInstance(QueryPaginationDto, paginationObject);
   const errors = validateSync(queryDto);
 
-  if (errors.length === 0) return queryDto;
-
-  if (errors.length === 1) {
-    throw new BadRequestException(errors[0].toString());
-  }
-
-  const errorMessages = [];
-  for (const error of errors) {
-    errorMessages.push(error.toString());
-  }
-
+  const errorMessages = formatErrorMessages(errors);
   throw new BadRequestException(errorMessages);
 }

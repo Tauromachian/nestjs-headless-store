@@ -27,15 +27,23 @@ import { AuthGuard } from './auth/guards/auth.guard';
     ]),
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('APP_SECRET'),
-        signOptions: {
-          expiresIn:
-            configService.get<string>('APP_ENV') === 'dev'
-              ? '7d'
-              : (configService.get<string>('APP_JWT_EXPIRATION_TIME') ?? '60s'),
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        let expirationTime: string;
+
+        if (configService.get<string>('APP_ENV') === 'dev' ?? '7d') {
+          expirationTime = '7d';
+        } else {
+          expirationTime =
+            configService.get<string>('APP_JWT_EXPIRATION_TIME') ?? '60s';
+        }
+
+        return {
+          secret: configService.get<string>('APP_SECRET'),
+          signOptions: {
+            expiresIn: '7d',
+          },
+        };
+      },
     }),
 
     UsersModule,

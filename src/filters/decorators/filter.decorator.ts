@@ -8,7 +8,7 @@ import { plainToInstance } from 'class-transformer';
 
 import { QueryFilterDto } from '../dto/query-filters.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { paginateDecoratorFunction } from 'src/pagination/decorator/pagination.decorator';
+import { paginateDecoratorFunction } from 'src/pagination/decorators/pagination.decorator';
 
 import { formatErrorsMessages } from 'src/shared/utils';
 

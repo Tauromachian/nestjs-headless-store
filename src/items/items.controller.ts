@@ -16,7 +16,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { ResponseItemDto } from './dto/response-item.dto';
 
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
-import { Filter } from 'src/filters/decorator/filter.decorator';
+import { Filter } from 'src/filters/decorators/filter.decorator';
 import { QueryFilterDto } from 'src/filters/dto/query-filters.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 

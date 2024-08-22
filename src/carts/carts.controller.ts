@@ -23,7 +23,7 @@ import { UpdateCartDto } from './dto/update-cart.dto';
 import { ResponseCartDto } from './dto/response-cart.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+import { Paginate } from 'src/pagination/decorators/pagination.decorator';
 
 @ApiTags('carts') // Group your routes under the 'carts' tag in Swagger
 @Controller('carts')

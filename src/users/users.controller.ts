@@ -15,7 +15,7 @@ import { ResponseUserDto } from './dto/response-user.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { ResponseCategoryDto } from 'src/categories/dto/response-category.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+import { Paginate } from 'src/pagination/decorators/pagination.decorator';
 import { RoleGuard } from 'src/auth/decorators/roles.decorator';
 import { Role } from './entities/user.entity';
 

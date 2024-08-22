@@ -16,7 +16,7 @@ export function paginateDecoratorFunction(_: null, ctx: ExecutionContext) {
   const request = ctx.switchToHttp().getRequest();
   const query = request.query;
 
-  if (!Object.keys(query)) return {};
+  if (!query || !Object.keys(query)) return {};
 
   const paginationObject = {
     limit: query?.limit !== undefined ? +query.limit : queryValues.LIMIT,

@@ -22,8 +22,9 @@ export const Filter = createParamDecorator(
     const paginationDto = paginateDecoratorFunction(null, ctx);
 
     const filterObject = {
-      select:
-        query?.select !== undefined ? parseSelectField(query.select) : null,
+      select: query?.select !== undefined ? query.select.split(',') : null,
+      relations:
+        query.relations !== undefined ? query.relations.split(',') : null,
     };
 
     const filterQueryDto = plainToInstance(QueryPaginationDto, filterObject);
@@ -38,7 +39,3 @@ export const Filter = createParamDecorator(
     throw new BadRequestException(errorMessages);
   },
 );
-
-function parseSelectField(queryStringFragment: string) {
-  return queryStringFragment.split(',');
-}

@@ -54,8 +54,6 @@ export function handleRelations<G>(
   queryBuilder: SelectQueryBuilder<G>,
   relations: string[],
 ) {
-  if (!relations) return;
-
   relations.forEach((relation) => {
     queryBuilder.leftJoinAndMapMany(
       `${queryBuilder.alias}.${relation}`,

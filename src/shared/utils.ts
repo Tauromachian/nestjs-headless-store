@@ -1,6 +1,6 @@
 import { ValidationError } from '@nestjs/common';
 
-export function formatErrorMessages(errors: ValidationError[]) {
+export function formatErrorsMessages(errors: ValidationError[]) {
   if (errors.length === 1) {
     return errors[0].toString();
   }

@@ -8,7 +8,7 @@ import { validateSync } from 'class-validator';
 
 import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { queryValues } from '../dto/constants';
-import { formatErrorMessages } from 'src/shared/utils';
+import { formatErrorsMessages } from 'src/shared/utils';
 
 export const Paginate = createParamDecorator(paginateDecoratorFunction);
 
@@ -26,6 +26,6 @@ export function paginateDecoratorFunction(_: null, ctx: ExecutionContext) {
   const queryDto = plainToInstance(QueryPaginationDto, paginationObject);
   const errors = validateSync(queryDto);
 
-  const errorMessages = formatErrorMessages(errors);
+  const errorMessages = formatErrorsMessages(errors);
   throw new BadRequestException(errorMessages);
 }

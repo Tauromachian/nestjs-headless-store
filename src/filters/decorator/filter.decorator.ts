@@ -10,7 +10,7 @@ import { QueryFilterDto } from '../dto/query-filters.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { paginateDecoratorFunction } from 'src/pagination/decorator/pagination.decorator';
 
-import { formatErrorMessages } from 'src/shared/utils';
+import { formatErrorsMessages } from 'src/shared/utils';
 
 export const Filter = createParamDecorator(
   (_, ctx: ExecutionContext): QueryFilterDto => {
@@ -34,7 +34,7 @@ export const Filter = createParamDecorator(
       return queryDto;
     }
 
-    const errorMessages = formatErrorMessages(errors);
+    const errorMessages = formatErrorsMessages(errors);
     throw new BadRequestException(errorMessages);
   },
 );

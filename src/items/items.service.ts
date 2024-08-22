@@ -1,12 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
-import { Item } from './entities/item.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { Item } from './entities/item.entity';
+
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
 import { ResponseItemDto } from './dto/response-item.dto';
+import { ResponseFilterDto } from 'src/filters/dto/response-filters.dto';
+
 import { filter } from 'src/filters/helpers';
 
 @Injectable()
@@ -25,7 +28,7 @@ export class ItemsService {
 
   async findAll(
     paginationDto: QueryPaginationDto,
-  ): Promise<ResponsePaginationDto<ResponseItemDto>> {
+  ): Promise<ResponseFilterDto<Partial<ResponseItemDto>>> {
     return filter(this.itemsRepository, paginationDto);
   }
 

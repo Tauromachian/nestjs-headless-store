@@ -15,9 +15,10 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ResponseItemDto } from './dto/response-item.dto';
 
-import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { Paginate } from 'src/pagination/decorator/pagination.decorator';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
+import { Filter } from 'src/filters/decorator/filter.decorator';
+import { QueryFilterDto } from 'src/filters/dto/query-filters.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @ApiTags('items')
 @Controller('items')
@@ -37,6 +38,7 @@ export class ItemsController {
   }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Retrieve all items' })
   @ApiResponse({
     status: 200,
@@ -44,8 +46,8 @@ export class ItemsController {
     type: [ResponsePaginationDto<ResponseItemDto>],
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  findAll(@Paginate() paginationDto: QueryPaginationDto) {
-    return this.itemsService.findAll(paginationDto);
+  findAll(@Filter() filterDto: QueryFilterDto) {
+    return this.itemsService.findAll(filterDto);
   }
 
   @Get(':id')

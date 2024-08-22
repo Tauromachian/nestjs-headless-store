@@ -32,18 +32,23 @@ export const Filter = createParamDecorator(
       return queryDto;
     }
 
-    if (errors.length === 1) {
-      throw new BadRequestException(errors[0].toString());
-    }
-
-    const errorMessages = [];
-    for (const error of errors) {
-      errorMessages.push(error.toString());
-    }
-
+    const errorMessages = formatErrorMessages(errors);
     throw new BadRequestException(errorMessages);
   },
 );
+
+function formatErrorMessages(errors) {
+  if (errors.length === 1) {
+    return errors[0].toString();
+  }
+
+  const errorMessages = [];
+  for (const error of errors) {
+    errorMessages.push(error.toString());
+  }
+
+  return errorMessages;
+}
 
 function parseSelectField(queryStringFragment: string) {
   return queryStringFragment.split(',');

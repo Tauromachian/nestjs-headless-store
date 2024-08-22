@@ -3,12 +3,14 @@ import {
   createParamDecorator,
   ExecutionContext,
 } from '@nestjs/common';
-import { QueryFilterDto } from '../dto/query-filters.dto';
-import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
+import { QueryFilterDto } from '../dto/query-filters.dto';
+import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { paginateDecoratorFunction } from 'src/pagination/decorator/pagination.decorator';
+
+import { formatErrorMessages } from 'src/shared/utils';
 
 export const Filter = createParamDecorator(
   (_, ctx: ExecutionContext): QueryFilterDto => {
@@ -36,19 +38,6 @@ export const Filter = createParamDecorator(
     throw new BadRequestException(errorMessages);
   },
 );
-
-function formatErrorMessages(errors) {
-  if (errors.length === 1) {
-    return errors[0].toString();
-  }
-
-  const errorMessages = [];
-  for (const error of errors) {
-    errorMessages.push(error.toString());
-  }
-
-  return errorMessages;
-}
 
 function parseSelectField(queryStringFragment: string) {
   return queryStringFragment.split(',');

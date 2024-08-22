@@ -15,8 +15,16 @@ export async function filter<G>(
     queryBuilder.select(queryDto.select);
   }
 
-  if (queryDto.limit) queryBuilder.limit(queryDto.limit);
-  if (queryDto.limit) queryBuilder.skip(queryDto.limit * (queryDto.page - 1));
+  queryBuilder.alias;
+
+  if (queryDto.limit) {
+    queryBuilder.limit(queryDto.limit);
+    queryBuilder.skip(queryDto.limit * (queryDto.page - 1));
+  }
+
+  if (queryDto.relations) {
+    handleRelations(queryBuilder, queryDto.relations);
+  }
 
   let result: [Partial<G>[], number];
 
@@ -40,4 +48,19 @@ export async function filter<G>(
     total: count,
     data: data,
   };
+}
+
+export function handleRelations<G>(
+  queryBuilder: SelectQueryBuilder<G>,
+  relations: string[],
+) {
+  if (!relations) return;
+
+  relations.forEach((relation) => {
+    queryBuilder.leftJoinAndMapMany(
+      `${queryBuilder.alias}.${relation}`,
+      `${queryBuilder.alias}.${relation}`,
+      relation,
+    );
+  });
 }

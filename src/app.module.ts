@@ -31,7 +31,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
       useFactory: (configService: ConfigService) => {
         let expirationTime: string;
 
-        if (configService.get<string>('APP_ENV') === 'dev' ?? '7d') {
+        if (configService.get<string>('APP_ENV') === 'dev') {
           expirationTime = '7d';
         } else {
           expirationTime =

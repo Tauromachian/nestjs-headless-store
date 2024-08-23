@@ -24,10 +24,10 @@ export class Notification extends Base {
   type: NotificationType;
 
   @Column({ default: false })
-  isSent: boolean;
+  isSent?: boolean;
 
   @Column({ default: false })
-  isRead: boolean;
+  isRead?: boolean;
 
   @ManyToOne(() => User, (user: User) => user.notifications)
   @JoinColumn({ name: 'userId' })

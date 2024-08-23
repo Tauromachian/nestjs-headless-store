@@ -21,7 +21,7 @@ export class Notification extends Base {
     enum: NotificationType,
     default: NotificationType.IN_APP,
   })
-  type: string; // e.g., 'email', 'sms', 'in-app'
+  type: NotificationType;
 
   @Column({ default: false })
   isSent: boolean;

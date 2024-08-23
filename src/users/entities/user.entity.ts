@@ -2,8 +2,8 @@ import { Base } from 'src/shared/entities/base.entity';
 import { Column, Entity } from 'typeorm';
 
 export enum Role {
-  ADMIN = 'ADMIN',
-  CUSTOMER = 'CUSTOMER',
+  ADMIN = 'admin',
+  CUSTOMER = 'customer',
 }
 
 @Entity()

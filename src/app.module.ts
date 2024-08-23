@@ -11,6 +11,7 @@ import { CartsModule } from './carts/carts.module';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 import { AuthGuard } from './auth/guards/auth.guard';
 
@@ -51,6 +52,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
     CategoriesModule,
     AuthModule,
     CartItemsModule,
+    NotificationsModule,
   ],
   providers: [
     {

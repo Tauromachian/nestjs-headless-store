@@ -40,7 +40,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
         return {
           secret: configService.get<string>('APP_SECRET'),
           signOptions: {
-            expiresIn: '7d',
+            expiresIn: expirationTime,
           },
         };
       },

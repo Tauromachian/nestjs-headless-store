@@ -16,7 +16,7 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { ResponseCartItemDto } from './dto/response-cart-item.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
-import { Paginate } from 'src/pagination/decorator/pagination.decorator';
+import { Paginate } from 'src/pagination/decorators/pagination.decorator';
 
 @ApiTags('cart-items')
 @Controller('cart-items')

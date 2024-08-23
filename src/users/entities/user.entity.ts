@@ -1,5 +1,7 @@
+import { Cart } from 'src/carts/entities/cart.entity';
+import { Notification } from 'src/notifications/entities/notification.entity';
 import { Base } from 'src/shared/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 export enum Role {
   ADMIN = 'admin',
@@ -23,4 +25,13 @@ export class User extends Base {
     default: Role.CUSTOMER,
   })
   role: Role;
+
+  @OneToOne(() => Cart, (cart: Cart) => cart.user)
+  cart: Cart;
+
+  @OneToMany(
+    () => Notification,
+    (notification: Notification) => notification.user,
+  )
+  notifications: Notification[];
 }

@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -41,7 +42,8 @@ export class CreateNotificationDto {
     default: false,
   })
   @IsBoolean()
-  isSent: boolean;
+  @IsOptional()
+  isSent?: boolean;
 
   @ApiProperty({
     description: 'Indicates if the notification has been read by the user',
@@ -49,7 +51,8 @@ export class CreateNotificationDto {
     default: false,
   })
   @IsBoolean()
-  isRead: boolean;
+  @IsOptional()
+  isRead?: boolean;
 
   @ApiProperty({
     description: 'The ID of the user receiving the notification',

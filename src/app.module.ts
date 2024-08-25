@@ -14,6 +14,7 @@ import { CartItemsModule } from './cart-items/cart-items.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 import { AuthGuard } from './auth/guards/auth.guard';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
     AuthModule,
     CartItemsModule,
     NotificationsModule,
+    MailerModule,
   ],
   providers: [
     {

@@ -19,11 +19,13 @@ import { QueryPaginationDto } from 'src/pagination/dto/query-pagination.dto';
 import { ResponsePaginationDto } from 'src/pagination/dto/response-pagination.dto';
 import { paginate } from 'src/pagination/helpers';
 import { ResponseUserDto } from './dto/response-user.dto';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Sse,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
@@ -15,6 +16,8 @@ import { Filter } from 'src/filters/decorators/filter.decorator';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { QueryFilterDto } from 'src/filters/dto/query-filters.dto';
+import { Observable } from 'rxjs';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('notifications')
 export class NotificationsController {
@@ -42,6 +45,12 @@ export class NotificationsController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   findAll(@Filter() filterDto: QueryFilterDto) {
     return this.notificationsService.findAll(filterDto);
+  }
+
+  @Public()
+  @Sse('sse')
+  sse(): Observable<any> {
+    return this.notificationsService.getNotificationStream();
   }
 
   @Get(':id')

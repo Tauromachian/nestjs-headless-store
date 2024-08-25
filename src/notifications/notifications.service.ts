@@ -11,9 +11,12 @@ import { QueryFilterDto } from 'src/filters/dto/query-filters.dto';
 import { ResponseFilterDto } from 'src/filters/dto/response-filters.dto';
 
 import { Notification } from './entities/notification.entity';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class NotificationsService {
+  private notificationsSubject = new Subject<any>();
+
   constructor(
     @InjectRepository(Notification)
     private readonly notificationsRepository: Repository<Notification>,
@@ -27,6 +30,8 @@ export class NotificationsService {
     );
 
     const newNotification = this.notificationsRepository.save(notification);
+
+    this.notify(notification);
 
     return newNotification;
   }
@@ -67,5 +72,13 @@ export class NotificationsService {
     if (result.affected === 0) throw new NotFoundException();
 
     return { message: 'Notification deleted successfully' };
+  }
+
+  getNotificationStream(): Observable<any> {
+    return this.notificationsSubject.asObservable();
+  }
+
+  notify(notification: Notification) {
+    this.notificationsSubject.next(notification);
   }
 }

@@ -7,7 +7,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 import { UsersService } from 'src/users/users.service';
 import { MailerService } from 'src/mailer/mailer.service';
-import { emailConstants, successRegisterEmailConstants } from './constants';
+import { successRegisterEmailConstants } from './constants';
 
 @Injectable()
 export class AuthService {

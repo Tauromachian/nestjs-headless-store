@@ -12,6 +12,7 @@ import { Role } from 'src/users/entities/user.entity';
 
 type AuthReturn = {
   access_token: string;
+  refresh_token: string;
 };
 
 type Payload = {
@@ -32,6 +33,9 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: this.configService.get('APP_SECRET'),
+      }),
+      refresh_token: await this.jwtService.signAsync(payload, {
+        secret: this.configService.get('APP_REFRESH_SECRET'),
       }),
     };
   }

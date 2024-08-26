@@ -8,6 +8,16 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { MailerService } from 'src/mailer/mailer.service';
 import { successRegisterEmailConstants } from './constants';
+import { Role } from 'src/users/entities/user.entity';
+
+type AuthReturn = {
+  access_token: string;
+};
+
+type Payload = {
+  id: string;
+  role: Role;
+};
 
 @Injectable()
 export class AuthService {
@@ -18,18 +28,7 @@ export class AuthService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async login(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string } | UnauthorizedException> {
-    const user = await this.usersService.findOne(email, true);
-
-    if (!(await compare(password, user.password))) {
-      return new UnauthorizedException();
-    }
-
-    const payload = { id: user.id, role: user.role };
-
+  async generateTokens(payload: Payload): Promise<AuthReturn> {
     return {
       access_token: await this.jwtService.signAsync(payload, {
         secret: this.configService.get('APP_SECRET'),
@@ -37,9 +36,19 @@ export class AuthService {
     };
   }
 
-  async register(
-    createUserDto: CreateUserDto,
-  ): Promise<{ access_token: string } | UnauthorizedException> {
+  async login(email: string, password: string): Promise<AuthReturn> {
+    const user = await this.usersService.findOne(email, true);
+
+    if (!(await compare(password, user.password))) {
+      throw new UnauthorizedException();
+    }
+
+    const payload = { id: user.id, role: user.role };
+
+    return await this.generateTokens(payload);
+  }
+
+  async register(createUserDto: CreateUserDto): Promise<AuthReturn> {
     const user = await this.usersService.create(createUserDto);
 
     const tokenObject = await this.login(user.email, createUserDto.password);

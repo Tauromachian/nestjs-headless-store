@@ -64,9 +64,9 @@ export class UsersService {
 
     let user = null;
     if (selectPassword) {
-      user = queryBuilder.select('*').where({ email }).getRawOne();
+      user = await queryBuilder.select('*').where({ email }).getRawOne();
     } else {
-      user = queryBuilder
+      user = await queryBuilder
         .select(['id', 'name', 'email', 'role', 'createdAt', 'updatedAt'])
         .where({ email })
         .getRawOne();

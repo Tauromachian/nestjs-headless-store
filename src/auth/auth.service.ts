@@ -40,6 +40,18 @@ export class AuthService {
     };
   }
 
+  async refreshToken(refreshToken: string): Promise<AuthReturn> {
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: this.configService.get('APP_REFRESH_SECRET'),
+      });
+
+      return await this.generateTokens(payload);
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
   async login(email: string, password: string): Promise<AuthReturn> {
     const user = await this.usersService.findOne(email, true);
 

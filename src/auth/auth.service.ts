@@ -11,8 +11,8 @@ import { successRegisterEmailConstants } from './constants';
 import { Role } from 'src/users/entities/user.entity';
 
 type AuthReturn = {
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
 };
 
 type Payload = {
@@ -31,10 +31,10 @@ export class AuthService {
 
   async generateTokens(payload: Payload): Promise<AuthReturn> {
     return {
-      access_token: await this.jwtService.signAsync(payload, {
+      accessToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get('APP_SECRET'),
       }),
-      refresh_token: await this.jwtService.signAsync(payload, {
+      refreshToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get('APP_REFRESH_SECRET'),
       }),
     };

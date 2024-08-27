@@ -46,6 +46,9 @@ export class AuthService {
         secret: this.configService.get('APP_REFRESH_SECRET'),
       });
 
+      delete payload.exp;
+      delete payload.iat;
+
       return await this.generateTokens(payload);
     } catch (error) {
       throw new UnauthorizedException();

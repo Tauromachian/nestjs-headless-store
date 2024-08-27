@@ -29,23 +29,9 @@ import { MailerModule } from './mailer/mailer.module';
     ]),
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        let expirationTime: string;
-
-        if (configService.get<string>('APP_ENV') === 'dev') {
-          expirationTime = '7d';
-        } else {
-          expirationTime =
-            configService.get<string>('APP_JWT_EXPIRATION_TIME') ?? '60s';
-        }
-
-        return {
-          secret: configService.get<string>('APP_SECRET'),
-          signOptions: {
-            expiresIn: expirationTime,
-          },
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('APP_SECRET'),
+      }),
     }),
 
     UsersModule,

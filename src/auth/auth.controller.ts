@@ -20,4 +20,11 @@ export class AuthController {
   register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh')
+  @Public()
+  refresh(@Body('refreshToken') refreshToken: string) {
+    return this.authService.refreshToken(refreshToken);
+  }
 }

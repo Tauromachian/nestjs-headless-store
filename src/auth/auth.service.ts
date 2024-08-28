@@ -135,9 +135,14 @@ export class AuthService {
     return tokenObject;
   }
 
-  async logout(refreshToken: string, res: Response): Promise<void> {
+  async logout(
+    refreshToken: string,
+    res: Response,
+  ): Promise<{ message: string }> {
     res.clearCookie('refreshToken');
 
     await this.sessionService.removeByToken(refreshToken);
+
+    return { message: 'Logout successfully' };
   }
 }

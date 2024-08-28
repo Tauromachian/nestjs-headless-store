@@ -4,12 +4,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Public } from './decorators/public.decorator';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -38,7 +39,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('refresh')
   @Public()
-  refresh(@Body('refreshToken') refreshToken: string) {
+  refresh(@Req() req: Request) {
+    const refreshToken = req.cookies['refreshToken'];
+
     return this.authService.refreshToken(refreshToken);
   }
 }

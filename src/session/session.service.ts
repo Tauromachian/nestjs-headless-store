@@ -18,6 +18,12 @@ export class SessionService {
     return this.sessionsRepository.save(session);
   }
 
+  async findByUserId(userId: number): Promise<Session[]> {
+    const sessions = await this.sessionsRepository.findBy({ userId });
+
+    return sessions;
+  }
+
   async findOne(id: number): Promise<Session> {
     const session = await this.sessionsRepository.findOne({ where: { id } });
 

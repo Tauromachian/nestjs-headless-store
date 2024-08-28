@@ -44,4 +44,13 @@ export class AuthController {
 
     return this.authService.refreshToken(refreshToken, res);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  @Public()
+  logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const refreshToken = req.cookies['refreshToken'];
+
+    return this.authService.logout(refreshToken, res);
+  }
 }

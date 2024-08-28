@@ -50,4 +50,12 @@ export class SessionService {
 
     return { message: 'Session removed successfully' };
   }
+
+  async removeByToken(token: string) {
+    const result = await this.sessionsRepository.delete({ token });
+
+    if (result.affected === 0) throw new NotFoundException();
+
+    return { message: 'Session removed successfully' };
+  }
 }

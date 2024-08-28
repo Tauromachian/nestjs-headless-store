@@ -15,6 +15,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 
 import { AuthGuard } from './auth/guards/auth.guard';
 import { MailerModule } from './mailer/mailer.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { MailerModule } from './mailer/mailer.module';
     CartItemsModule,
     NotificationsModule,
     MailerModule,
+    SessionModule,
   ],
   providers: [
     {

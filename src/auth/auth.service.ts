@@ -68,7 +68,14 @@ export class AuthService {
 
     const payload = { id: user.id, role: user.role };
 
-    return await this.generateTokens(payload);
+    const tokens = await this.generateTokens(payload);
+
+    this.sessionService.create({
+      userId: user.id,
+      token: tokens.refreshToken,
+    });
+
+    return tokens;
   }
 
   async register(createUserDto: CreateUserDto): Promise<AuthReturn> {

@@ -1,7 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Public } from './decorators/public.decorator';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -10,15 +18,21 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  login(@Body() signInDto: Record<string, string>) {
-    return this.authService.login(signInDto.email, signInDto.password);
+  login(
+    @Body() signInDto: Record<string, string>,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.login(signInDto.email, signInDto.password, res);
   }
 
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('register')
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.authService.register(createUserDto);
+  register(
+    @Body() createUserDto: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.register(createUserDto, res);
   }
 
   @HttpCode(HttpStatus.OK)

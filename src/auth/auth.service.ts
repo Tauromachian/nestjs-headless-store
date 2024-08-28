@@ -25,7 +25,7 @@ type Payload = {
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly mailerService: MailerService,
     private readonly sessionService: SessionService,

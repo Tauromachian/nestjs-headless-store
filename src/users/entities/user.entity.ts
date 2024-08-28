@@ -1,5 +1,6 @@
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
+import { Session } from 'src/session/entities/session.entity';
 import { Base } from 'src/shared/entities/base.entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
@@ -34,4 +35,7 @@ export class User extends Base {
     (notification: Notification) => notification.user,
   )
   notifications: Notification[];
+
+  @OneToMany(() => Session, (session: Session) => session.user)
+  sessions: Session[];
 }

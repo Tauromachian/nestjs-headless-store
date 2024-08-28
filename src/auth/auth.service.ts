@@ -2,18 +2,20 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
+import { Response } from 'express';
+
+import { successRegisterEmailConstants } from './constants';
 
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 import { UsersService } from 'src/users/users.service';
 import { MailerService } from 'src/mailer/mailer.service';
-import { successRegisterEmailConstants } from './constants';
 import { Role } from 'src/users/entities/user.entity';
 import { SessionService } from 'src/session/session.service';
 
 type AuthReturn = {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
 };
 
 type Payload = {
@@ -74,7 +76,11 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<AuthReturn> {
+  async login(
+    email: string,
+    password: string,
+    res: Response,
+  ): Promise<AuthReturn> {
     const user = await this.usersService.findOne(email, true);
 
     if (!(await compare(password, user.password))) {
@@ -90,13 +96,27 @@ export class AuthService {
       token: tokens.refreshToken,
     });
 
-    return tokens;
+    res.cookie('refreshToken', tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: this.configService.get('APP_ENV') === 'production',
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+
+    return { accessToken: tokens.accessToken };
   }
 
-  async register(createUserDto: CreateUserDto): Promise<AuthReturn> {
+  async register(
+    createUserDto: CreateUserDto,
+    res: Response,
+  ): Promise<AuthReturn> {
     const user = await this.usersService.create(createUserDto);
 
-    const tokenObject = await this.login(user.email, createUserDto.password);
+    const tokenObject = await this.login(
+      user.email,
+      createUserDto.password,
+      res,
+    );
 
     this.mailerService.sendMail({
       subject: successRegisterEmailConstants.SUBJECT,

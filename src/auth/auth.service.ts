@@ -9,6 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { MailerService } from 'src/mailer/mailer.service';
 import { successRegisterEmailConstants } from './constants';
 import { Role } from 'src/users/entities/user.entity';
+import { SessionService } from 'src/session/session.service';
 
 type AuthReturn = {
   accessToken: string;
@@ -27,6 +28,7 @@ export class AuthService {
     private jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly mailerService: MailerService,
+    private readonly sessionService: SessionService,
   ) {}
 
   async generateTokens(payload: Payload): Promise<AuthReturn> {

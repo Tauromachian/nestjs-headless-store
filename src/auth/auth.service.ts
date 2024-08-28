@@ -46,7 +46,7 @@ export class AuthService {
     };
   }
 
-  async refreshToken(refreshToken: string): Promise<AuthReturn> {
+  async refreshToken(refreshToken: string, res: Response): Promise<AuthReturn> {
     try {
       const payload = await this.jwtService.verifyAsync(refreshToken, {
         secret: this.configService.get('APP_REFRESH_SECRET'),
@@ -70,7 +70,14 @@ export class AuthService {
         token: newTokens.refreshToken,
       });
 
-      return newTokens;
+      res.cookie('refreshToken', newTokens.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        secure: this.configService.get('APP_ENV') === 'production',
+        sameSite: 'strict',
+        httpOnly: true,
+      });
+
+      return { accessToken: newTokens.accessToken };
     } catch (error) {
       throw new UnauthorizedException();
     }

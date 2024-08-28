@@ -50,10 +50,25 @@ export class AuthService {
         secret: this.configService.get('APP_REFRESH_SECRET'),
       });
 
+      const sessions = await this.sessionService.findByUserId(payload.id);
+
+      const foundMatch = sessions.find(
+        (session) => session.token === refreshToken,
+      );
+
+      if (!foundMatch) throw new Error();
+
       delete payload.exp;
       delete payload.iat;
 
-      return await this.generateTokens(payload);
+      const newTokens = await this.generateTokens(payload);
+
+      this.sessionService.update(foundMatch.id, {
+        userId: payload.id,
+        token: newTokens.refreshToken,
+      });
+
+      return newTokens;
     } catch (error) {
       throw new UnauthorizedException();
     }

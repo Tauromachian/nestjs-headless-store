@@ -1,27 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { Repository } from 'typeorm';
+
 import { Response } from 'express';
+import { compare } from 'bcrypt';
 
-import { successRegisterEmailConstants } from './constants';
-
+import { UsersService } from '@/users/users.service';
+import { Payload } from './types/payload.type';
+import { AuthReturn } from './types/auth-return.type';
+import { SessionService } from '@/sessions/session.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-
-import { UsersService } from 'src/users/users.service';
-import { MailerService } from 'src/mailer/mailer.service';
-import { Role } from 'src/users/entities/user.entity';
-import { SessionService } from 'src/session/session.service';
-
-type AuthReturn = {
-  accessToken: string;
-  refreshToken?: string;
-};
-
-type Payload = {
-  id: string;
-  role: Role;
-};
+import { User } from '@/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -29,8 +21,8 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly mailerService: MailerService,
     private readonly sessionService: SessionService,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
   async generateTokens(payload: Payload): Promise<AuthReturn> {
@@ -44,6 +36,50 @@ export class AuthService {
         expiresIn: this.configService.get('APP_REFRESH_JWT_EXPIRATION_TIME'),
       }),
     };
+  }
+
+  async login(
+    email: string,
+    password: string,
+    res: Response,
+  ): Promise<AuthReturn> {
+    let user: User;
+
+    try {
+      user = await this.usersRepository.findOne({
+        where: { email },
+        select: ['id', 'role', 'email', 'password'],
+      });
+    } catch {
+      throw new UnauthorizedException();
+    }
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = { id: user.id, role: user.role };
+
+    const tokens = await this.generateTokens(payload);
+
+    this.sessionService.create({
+      userId: user.id,
+      token: tokens.refreshToken,
+    });
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: this.configService.get('APP_ENV') === 'production',
+      sameSite: 'strict',
+      httpOnly: true,
+    });
+
+    return { accessToken: tokens.accessToken };
   }
 
   async refreshToken(refreshToken: string, res: Response): Promise<AuthReturn> {
@@ -79,38 +115,10 @@ export class AuthService {
 
       return { accessToken: newTokens.accessToken };
     } catch (error) {
+      console.warn(error);
+
       throw new UnauthorizedException();
     }
-  }
-
-  async login(
-    email: string,
-    password: string,
-    res: Response,
-  ): Promise<AuthReturn> {
-    const user = await this.usersService.findOne(email, true);
-
-    if (!(await compare(password, user.password))) {
-      throw new UnauthorizedException();
-    }
-
-    const payload = { id: user.id, role: user.role };
-
-    const tokens = await this.generateTokens(payload);
-
-    this.sessionService.create({
-      userId: user.id,
-      token: tokens.refreshToken,
-    });
-
-    res.cookie('refreshToken', tokens.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      secure: this.configService.get('APP_ENV') === 'production',
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-
-    return { accessToken: tokens.accessToken };
   }
 
   async register(
@@ -125,24 +133,6 @@ export class AuthService {
       res,
     );
 
-    this.mailerService.sendMail({
-      subject: successRegisterEmailConstants.SUBJECT,
-      body: successRegisterEmailConstants.BODY,
-      to: user.email,
-      from: this.configService.get<string>('APP_EMAIL'),
-    });
-
     return tokenObject;
-  }
-
-  async logout(
-    refreshToken: string,
-    res: Response,
-  ): Promise<{ message: string }> {
-    res.clearCookie('refreshToken');
-
-    await this.sessionService.removeByToken(refreshToken);
-
-    return { message: 'Logout successfully' };
   }
 }
